@@ -24,6 +24,16 @@ export default function MainContainer() {
   const [selectedPetId, setSelectedPetId] = useState(() =>
     petProfiles.length > 0 ? petProfiles[0].id : null
   );
+
+  // Keep selectedPetId in sync with petProfiles (if profiles change and id not in list, select first)
+  React.useEffect(() => {
+    if (
+      petProfiles.length > 0 &&
+      (selectedPetId === null || !petProfiles.some(p => p.id === selectedPetId))
+    ) {
+      setSelectedPetId(petProfiles[0].id);
+    }
+  }, [petProfiles, selectedPetId]);
   // Tasks: [{ id, petId, taskName, recurrence, notes, scheduledTime, ... }]
   const [tasks, setTasks] = useState(() => [
     { id: 1, petId: 1, taskName: "Feed Breakfast", scheduledTime: "08:00", recurrence: "daily", completed: false },
