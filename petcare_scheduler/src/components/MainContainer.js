@@ -21,17 +21,18 @@ export default function MainContainer() {
     { id: 2, name: "Whiskers", type: "Cat", age: 2, notes: "" }
   ]);
   // Selected pet for sidebar/profile view (default to first if available)
-  const [selectedPetId, setSelectedPetId] = useState(() =>
-    petProfiles.length > 0 ? petProfiles[0].id : null
-  );
+  const [selectedPetId, setSelectedPetId] = useState(null);
 
-  // Keep selectedPetId in sync with petProfiles (if profiles change and id not in list, select first)
+  // Always keep selectedPetId in sync with petProfiles: if none is selected or current selection is gone, select first pet (if any)
   React.useEffect(() => {
     if (
       petProfiles.length > 0 &&
       (selectedPetId === null || !petProfiles.some(p => p.id === selectedPetId))
     ) {
       setSelectedPetId(petProfiles[0].id);
+    }
+    if (petProfiles.length === 0 && selectedPetId !== null) {
+      setSelectedPetId(null);
     }
   }, [petProfiles, selectedPetId]);
   // Tasks: [{ id, petId, taskName, recurrence, notes, scheduledTime, ... }]
